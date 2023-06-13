@@ -1,19 +1,19 @@
 [
     {
         "title": "test-module-tpl",
-        "key": "168664847753964430",
+        "key": "168665029818217",
         "type": "folder",
         "children": [
             {
                 "title": "cmpts",
-                "key": "16866484775398713",
+                "key": "16866502981828060",
                 "type": "folder",
                 "children": [
                     {
                         "title": "header.vue",
                         "type": "file",
                         "tplContent": "<div> {{info}} </div>",
-                        "key": "168664847754076642"
+                        "key": "168665029818267983"
                     }
                 ]
             },
@@ -21,7 +21,7 @@
                 "title": "testIndex.vue",
                 "type": "file",
                 "tplContent": "<div>{{info}}</div>",
-                "key": "168664847754031523"
+                "key": "168665029818342237"
             }
         ]
     }

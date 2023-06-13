@@ -15,7 +15,7 @@ export class MessageBridge {
     }
     private messageHandler: any = {
         getTplDatas: (message: any) => {
-            const datas = getTplDatasFn(this.context, this.panel);
+            const datas = getTplDatasFn(this.context, this.panel, this.uri,);
             this.panel.webview.postMessage({cmd: 'vscodeCallback', cbid: message.cbid, data: datas});
         },
         saveTplDatas: (message: any) => {

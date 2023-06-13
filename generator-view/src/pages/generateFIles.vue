@@ -1,5 +1,9 @@
 <template>
   <div class="data-config">
+    <div class="curnt-path">
+      <span>当前目录：</span>
+      <span>{{curntPath}}</span>
+    </div>
     <a-select
       v-model:value="state.selType"
       class="m-r-10px"
@@ -44,9 +48,16 @@
   const selTypeTplDatas = computed(() => {
     return tplDatas.value[state.selType]
   })
+  const curntPath = computed(() => {
+    return tplDatas.value['curnt_work_catalog_path']
+  })
 </script>
 
 <style scoped>
+.curnt-path{
+  padding: 10px;
+  padding-top: 0;
+}
 .gen-config{
   margin-top: 10px;
 }

@@ -36,10 +36,12 @@ const readModuleFiles = (strPath: string, childItem: string) => {
     readFn(strPath, childItem, moduleRes);
     return [moduleRes];
 };
-export const getTplDatasFn = (context: any, panel: any) => {
+export const getTplDatasFn = (context: any, panel: any, uri: any) => {
     const tarFolder =  path.join(context.extensionPath, CACHE_PATH);
     const folderContent = fs.readdirSync (tarFolder);
-    const res = {} as {[k: string]: string};
+    const res = {
+        'curnt_work_catalog_path': path.dirname(uri.path.slice(1))
+    } as any;
     folderContent.map((fileType: string) => {
         const fileTypePath = path.join(tarFolder, fileType);
         const fileTypeChilds = fs.readdirSync(fileTypePath);
