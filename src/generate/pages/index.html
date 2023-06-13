@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生成模板文件</title>
+    <script src="./assets/vue.js"></script>
+    <link rel="stylesheet" href="./assets/element-ui/element_ui.css">
+    <script src="./assets/element-ui/element_ui.js"></script>
+    <style>
+        html, body, #app{
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+            font-size: 12px;
+        }
+        #app{
+            padding: 0 10px;
+        }
+        .tools-box{
+            margin-bottom: 10px;
+        }
+        .tpl-add-edit__content{
+            padding: 0 10px;
+        }
+        .single-file-tpl{
+            margin: 10px 0;
+        }
+        .modules-tpl{
+            display: flex;
+            flex-direction: row;
+        }
+        .module-folder{
+            width: 30%;
+        }
+        .module-item-file{
+            width: 70%;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <el-tabs v-model="activeName" @tab-click="handleTabClick">
+            <el-tab-pane label="数据配置" name="dataConf">
+                <el-select v-model="genSelTplType" placeholder="请选择模板类型" @change="genSelTplTypeChange">
+                    <el-option v-for="item in tplManage.tplTypeOptions" :key="item.vlaue" :label="item.label" :value="item.vlaue"></el-option>
+                </el-select>
+                <el-select v-model="genSelectedTpl" placeholder="请选择模板" @change="genSelTplChange">
+                    <el-option v-for="(item, index) in tplOption" :key="index" :label="item.name" :value="item.name"></el-option>
+                </el-select>
+                <el-collapse v-model="dataConfActiveNames">
+                    <el-collapse-item title="模板内容" name="tplContent">
+                        <el-input
+                            v-if="genSelTplType == 'singleFile'"
+                            type="textarea"
+                            :autosize="{ minRows: 3, maxRows: 6}"
+                            placeholder="请输入导入依赖"
+                            v-model="dataConfig.tplContent">
+                        </el-input>
+                        <div v-else class="module-files-content">
+                            modules
+                        </div>
+                    </el-collapse-item>
+                    <el-collapse-item title="配置数据JSON" name="dataJson">
+                        <el-input
+                            type="textarea"
+                            :autosize="{ minRows: 6, maxRows: 15}"
+                            placeholder="请输入配置数据"
+                            v-model="dataConfig.dataJson">
+                        </el-input>
+                    </el-collapse-item>
+                  </el-collapse>
+            </el-tab-pane>
+            <el-tab-pane label="模板管理" name="tplManage">
+                <div class="tpl-table">
+                    <div class="tools-box">
+                        <el-button
+                            size="mini"
+                            type="success"
+                            @click="handleAddTpl">新增</el-button>
+                    </div>
+                    <el-table
+                        :data="tplManage.tableData"
+                        style="width: 100%">
+                        <el-table-column
+                            label="模板名称"
+                            width="180">
+                            <template slot-scope="scope">
+                                <i class="el-icon-time"></i>
+                                <span style="margin-left: 10px">{{ scope.row.name }}</span>
+                            </template>
+                        </el-table-column>
+                        <el-table-column label="描述">
+                            <template slot-scope="scope">
+                                <el-popover trigger="hover" placement="top">
+                                <p>姓名: {{ scope.row.name }}</p>
+                                <p>住址: {{ scope.row.des }}</p>
+                                <div slot="reference" class="name-wrapper">
+                                    <el-tag size="medium">{{ scope.row.name }}</el-tag>
+                                </div>
+                                </el-popover>
+                            </template>             
+                        </el-table-column>
+                        <el-table-column label="操作" width="180">
+                            <template slot-scope="scope">
+                                <el-button
+                                    size="mini"
+                                    @click="handleEditTpl(scope)">编辑</el-button>
+                                <el-button
+                                    size="mini"
+                                    type="danger"
+                                    @click="handleDeleteTpl(scope)">删除</el-button>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </div>
+            </el-tab-pane>
+        </el-tabs>
+        <el-drawer
+            :title="tplAddOrEditTitle"
+            :before-close="tplAddOrEditHandleClose"
+            :visible.sync="tplAddOrEditDialogShow"
+            direction="ltr"
+            size="70%"
+            custom-class="tpl-add-edit"
+            ref="tplAddOrEditDrawer"
+        >
+            <div class="tpl-add-edit__content">
+                <el-form :model="tplManage.form" size="mini">
+                    <el-form-item label="模板名称" :label-width="tplManage.formLabelWidth">
+                        <el-input v-model="tplManage.form.tplName" autocomplete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="模板简介" :label-width="tplManage.formLabelWidth">
+                        <el-input
+                            type="textarea"
+                            :autosize="{ minRows: 2, maxRows: 5}"
+                            placeholder="请输入模板简介"
+                            v-model="tplManage.form.tplDes">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item label="模板类型" :label-width="tplManage.formLabelWidth">
+                        <el-select v-model="tplManage.form.tplType" placeholder="请选择模板类型" :disabled="tplManage.form.tplName ? false : true" @change="tplManageAddTplTypeChange">
+                            <el-option v-for="item in tplManage.tplTypeOptions" :key="item.vlaue" :label="item.label" :value="item.vlaue"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+                <el-tag>模板内容</el-tag>
+                <div v-if="tplManage.form.tplType == 'singleFile'" class="single-file-tpl">
+                    <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 6}"
+                        placeholder="请输入模板内容"
+                        v-model="tplManage.tplContent">
+                    </el-input>
+                    <el-input
+                        type="textarea"
+                        :autosize="{ minRows: 6}"
+                        placeholder="请输入模板数据Demo"
+                        v-model="tplManage.tplDataDemo">
+                    </el-input>
+                </div>
+                <div v-if="tplManage.form.tplType == 'modules'" class="modules-tpl">
+                    <div class="module-folder">
+                        <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick"></el-tree>
+                    </div>
+                    <div class="module-item-file">
+                        <el-form>
+                            <el-form-item label="文件名称">
+                                <el-input
+                                    placeholder="请输入文件名称">
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item label="描述">
+                                <el-input
+                                    type="textarea"
+                                    :autosize="{ minRows: 6, maxRows: 15}"
+                                    placeholder="请输入描述">
+                                </el-input>
+                            </el-form-item>
+                        </el-form>
+                        <el-tag>模板内容</el-tag>
+                        <div class="module-item-file-content">
+                            <el-input
+                                type="textarea"
+                                :autosize="{ minRows: 6}"
+                                placeholder="请输入模板内容">
+                            </el-input>
+                        </div>
+                    </div>
+                </div>
+                <div class="tpl-add-edit__footer">
+                    <el-button @click="tplAddOrEditHandleCancel">取 消</el-button>
+                    <el-button type="primary" @click="tplAddOrEditHandleSubmit" :loading="tplAddOrEditLoading">{{ tplAddOrEditLoading ? '提交中 ...' : '确 定' }}</el-button>
+                </div>
+            </div>
+        </el-drawer>
+    </div>
+    <script src="./main.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{
+  "name": "generator-view",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ant-design-vue": "^3.2.20",
+    "monaco-editor": "^0.38.0",
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.1.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.3.9",
+    "vite-plugin-monaco-editor": "^1.1.0",
+    "vite-plugin-windicss": "^1.9.0",
+    "vue-tsc": "^1.4.2",
+    "windicss": "^3.5.6"
+  }
+}

@@ -1,0 +1,28 @@
+[
+    {
+        "title": "test-module-tpl",
+        "key": "168621893152237425",
+        "type": "folder",
+        "children": [
+            {
+                "title": "cmpts",
+                "key": "16862189315228565",
+                "type": "folder",
+                "children": [
+                    {
+                        "title": "header.vue",
+                        "type": "file",
+                        "tplContent": "<div> header </div>",
+                        "key": "168621893152388917"
+                    }
+                ]
+            },
+            {
+                "title": "testIndex.vue",
+                "type": "file",
+                "tplContent": "<div> idnex </div>",
+                "key": "168621893152310396"
+            }
+        ]
+    }
+]
