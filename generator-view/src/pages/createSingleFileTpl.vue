@@ -49,7 +49,8 @@
   const refreshTplDatas = inject('refreshTplDatas') as any;
   const state = reactive({
     visible: false,
-    collapseActiveKey: 'tplContent'
+    collapseActiveKey: 'tplContent',
+    curntRowOrignData: {} as any,
   });
   const tplInfo = reactive({
     tplName: '',
@@ -59,6 +60,7 @@
   });
   watch(() => props.curtRowData, () => {
     if(props.curtRowData){
+      state.curntRowOrignData = JSON.parse(JSON.stringify(props.curtRowData));
       const { info, tplContent, demoData} = props.curtRowData;
       tplInfo.tplName = info.tplName;
       tplInfo.tplDes = info.tplDes;
@@ -102,7 +104,10 @@
           cmd: 'saveTplDatas',
           datas: {
             saveType: props.curtRowData ? 'edit' : 'create',
-            saveDatas: datas
+            saveDatas: JSON.stringify({
+              datas,
+              originData: state.curntRowOrignData
+            })
           },
         }, 
         (res) => {

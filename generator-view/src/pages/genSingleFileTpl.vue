@@ -85,7 +85,9 @@
           cmd: 'saveTplDatas',
           datas: {
             saveType: 'create',
-            saveDatas: datas
+            saveDatas: JSON.stringify({
+              datas
+            })
           },
         }, 
         (res) => {

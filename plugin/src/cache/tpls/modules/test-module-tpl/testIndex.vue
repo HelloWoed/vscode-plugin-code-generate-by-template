@@ -1,1 +1,1 @@
-<div> idnex </div>
+<div>{{info}}</div>

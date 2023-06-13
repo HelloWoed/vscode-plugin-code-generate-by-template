@@ -24,7 +24,11 @@ export class MessageBridge {
             });
         },
         delFolder: (message: any) => {
-            const res = deleteFolder(message.datas.path);
+            let { datas } = message;
+            if(typeof datas === 'string'){
+                datas = JSON.parse(datas);
+            }
+            const res = deleteFolder(datas.path);
             this.panel.webview.postMessage({cmd: 'vscodeCallback', cbid: message.cbid, data: res});
         },
         genSingleTplDatas: (message: any) => {

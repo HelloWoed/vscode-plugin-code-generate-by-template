@@ -19,8 +19,11 @@
     <div class="tpl-table">
       <a-table :dataSource="selTypeTplDatas" :columns="state.tableColumns">
         <template #bodyCell="{ column, record }">
-          <template v-if="['tplName', 'tplDes', 'updateDate'].includes(column.dataIndex)">
+          <template v-if="['tplName', 'tplDes'].includes(column.dataIndex)">
             <span>{{ record.info[column.dataIndex] }}</span>
+          </template>
+          <template v-if="['createDate', 'updateDate'].includes(column.dataIndex)">
+            <span>{{ formatDate(record.info[column.dataIndex]) }}</span>
           </template>
           <template v-if="column.dataIndex == 'operation'">
             <a-button type="link" @click="editTpl(record)">修改</a-button>
@@ -35,11 +38,12 @@
 </template>
 
 <script setup lang='tsx'>
-  import { ref, reactive, inject, computed } from 'vue';
+  import { ref, reactive, inject, computed, createVNode } from 'vue';
   import createSingleFileTpl from './createSingleFileTpl.vue';
   import createModuleFileTpl from './createModuleFileTpl.vue';
   import { message } from 'ant-design-vue';
   import { callVscode } from '../utils/message'
+  import { Modal } from 'ant-design-vue';
 
   const createSingleFileTplRef = ref(null as any);
   const createModuleFileTplRef = ref(null as any);
@@ -54,6 +58,10 @@
       {
         title: '简介',
         dataIndex: 'tplDes'
+      },
+      {
+        title: '创建时间',
+        dataIndex: 'createDate'
       },
       {
         title: '更新时间',
@@ -88,20 +96,33 @@
     }
   }
   const delTpl = (record) => {
-    callVscode(
-        {
-          cmd: 'delFolder',
-          datas: record,
-        }, 
-        (res) => {
-          if(res.success){
-            refreshTplDatas()
-            message.success(res.message);
-          }else{
-            message.error(res.message || '删除失败。');
+    Modal.confirm({
+      title: `确定要删除吗 【${record.info.tplName}】模板吗？`,
+      okText: '确定',
+      okType: 'danger',
+      cancelText: '取消',
+      content: createVNode('div', { style: 'color:red;' }, '模板删除后不可恢复，确定要删除吗？'),
+      onOk() {
+        callVscode(
+          {
+            cmd: 'delFolder',
+            datas: JSON.stringify(record),
+          }, 
+          (res) => {
+            if(res.success){
+              refreshTplDatas()
+              message.success(res.message);
+            }else{
+              message.error(res.message || '删除失败。');
+            }
           }
-        }
-      );
+        );
+      },
+      onCancel() {
+        console.log('Cancel');
+      },
+      class: 'delete-modal',
+    });
   }
   const createSingleTpl = () => {
     state.curtRowData = null;
@@ -110,6 +131,20 @@
   const createModuleTpl = () => {
     state.curtRowData = null;
     createModuleFileTplRef.value?.open()
+  }
+  const formatDate = (val) => {
+    if(val){
+      const dateData = new Date(val);
+      const year = dateData.getFullYear();
+      const month = dateData.getMonth() + 1;
+      const day = dateData.getDate();
+      const h = dateData.getHours();
+      const m = dateData.getMinutes();
+      const s = dateData.getSeconds();
+      return `${year}-${month}-${day} ${h}:${m}:${s}`;
+    }else{
+      return '--'
+    }
   }
 </script>
 

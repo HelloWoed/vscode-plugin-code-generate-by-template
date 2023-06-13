@@ -23,8 +23,8 @@ export const genModuleTpl = (context: any, panel: any, uri: any, datas: any) => 
                     genFun(path.join(pathStr, item.title), item.children);
                 }
             }else if(item.type === 'file'){
-                const dataKey = item.title.split('.')[0];
-                const contentRes = parseFile(item.tplContent, tplDataDemo[dataKey]);
+                const fileName = item.title.slice(0, item.title.lastIndexOf('.'));
+                const contentRes = parseFile(item.tplContent, {...tplDataDemo[fileName], fileName});
                 if(contentRes.success){
                     fs.writeFileSync(path.join(pathStr, item.title), contentRes.fileContent);
                 }

@@ -85,7 +85,8 @@
     collapseActiveKey: 'moduleContent',
     moduleSelectedKeys: [] as string[],
     moduleExpandedKeys: [] as string[],
-    selectedNodeData: null as any
+    selectedNodeData: null as any,
+    curntRowOrignData: {} as any
   });
   const tplInfo = reactive({
     tplName: '',
@@ -115,6 +116,7 @@
   }, {deep: true})
   watch(() => props.curtRowData, () => {
     if(props.curtRowData){
+      state.curntRowOrignData = JSON.parse(JSON.stringify(props.curtRowData));
       const { info, moduleTreeData, demoData} = JSON.parse(JSON.stringify(props.curtRowData));
       tplInfo.tplName = info.tplName;
       tplInfo.tplDes = info.tplDes;
@@ -123,6 +125,7 @@
         tplInfo.moduleTreeData.push(item)
       });
       tplInfo.tplDataDemo = demoData;
+      state.selectedNodeData = tplInfo.moduleTreeData[0] || null;
     }
   }, { immediate: true, deep: true });
   const open = () => {
@@ -234,7 +237,10 @@
           cmd: 'saveTplDatas',
           datas: {
             saveType: props.curtRowData ? 'edit' : 'create',
-            saveDatas: datas
+            saveDatas: JSON.stringify({
+              datas,
+              originData: state.curntRowOrignData
+            })
           },
         }, 
         (res) => {

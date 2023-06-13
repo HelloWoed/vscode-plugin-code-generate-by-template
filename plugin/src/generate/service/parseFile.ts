@@ -4,7 +4,7 @@ export default (content: string, datas: string) => {
     let res = {} as {success: boolean; fileContent: string; message: string;};
     let contentStr = '';
     try {
-        contentStr = template.render(content, JSON.parse(datas));
+        contentStr = template.render(content, typeof datas === 'string' ? JSON.parse(datas) : datas);
         res = {
             success: true,
             fileContent: contentStr,

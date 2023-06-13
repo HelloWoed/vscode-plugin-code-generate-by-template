@@ -1,27 +1,27 @@
 [
     {
         "title": "test-module-tpl",
-        "key": "168621893152237425",
+        "key": "168664847753964430",
         "type": "folder",
         "children": [
             {
                 "title": "cmpts",
-                "key": "16862189315228565",
+                "key": "16866484775398713",
                 "type": "folder",
                 "children": [
                     {
                         "title": "header.vue",
                         "type": "file",
-                        "tplContent": "<div> header </div>",
-                        "key": "168621893152388917"
+                        "tplContent": "<div> {{info}} </div>",
+                        "key": "168664847754076642"
                     }
                 ]
             },
             {
                 "title": "testIndex.vue",
                 "type": "file",
-                "tplContent": "<div> idnex </div>",
-                "key": "168621893152310396"
+                "tplContent": "<div>{{info}}</div>",
+                "key": "168664847754031523"
             }
         ]
     }
