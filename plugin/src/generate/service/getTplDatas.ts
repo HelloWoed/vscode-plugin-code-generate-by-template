@@ -1,5 +1,6 @@
 const path = require('path');
 const fs = require('fs');
+import { getCurntCatalog } from '../../utils/fsUtils';
 import { CACHE_PATH, infoFileName, demoDataFileName, moduleTreeDataFileName } from './cosnt';
 
 const buildTreeKey = () => {
@@ -40,7 +41,7 @@ export const getTplDatasFn = (context: any, panel: any, uri: any) => {
     const tarFolder =  path.join(context.extensionPath, CACHE_PATH);
     const folderContent = fs.readdirSync (tarFolder);
     const res = {
-        'curnt_work_catalog_path': path.dirname(uri.path.slice(1))
+        'curnt_work_catalog_path': getCurntCatalog(uri)
     } as any;
     folderContent.map((fileType: string) => {
         const fileTypePath = path.join(tarFolder, fileType);

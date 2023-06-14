@@ -212,6 +212,11 @@
    */
    const checkTplManageSaveDatas = (datas) => {
     return new Promise((resolve, reject) => {
+      if(!datas.tplName.trim()){
+        message.warning('模板名称不能为空!');
+        reject();
+        return false;
+      }
       const tplDataDemo = datas.tplDataDemo;
       // 检查 tplDataDemo 是否时JSON数据
       const tplDataDemoIsChecked = isJsonString(tplDataDemo);

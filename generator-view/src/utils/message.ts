@@ -15,7 +15,7 @@ interface callVscodeData {
  * @param data 可以是类似 {cmd: 'xxx', param1: 'xxx'}，也可以直接是 cmd 字符串
  * @param cb 可选的回调函数
  */
-function callVscode(data: callVscodeData | string, cb: any) {
+const callVscode = (data: callVscodeData | string, cb: any) => {
     if (typeof data === 'string') {
         data = { cmd: data };
     }

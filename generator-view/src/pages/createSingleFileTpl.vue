@@ -82,15 +82,20 @@
    */
   const checkTplManageSaveDatas = (datas) => {
       return new Promise((resolve, reject) => {
-          const tplDataDemo = datas.tplDataDemo;
-          // 检查 tplDataDemo 是否时JSON数据
-          const tplDataDemoIsChecked = isJsonString(tplDataDemo);
-          if(!tplDataDemoIsChecked){
-              message.warning('模板数据Demo不是合法的JSON!');
-              reject();
-              return false;
-          }
-          resolve(true);
+        if(!datas.tplName.trim()){
+          message.warning('模板名称不能为空!');
+          reject();
+          return false;
+        }
+        const tplDataDemo = datas.tplDataDemo;
+        // 检查 tplDataDemo 是否时JSON数据
+        const tplDataDemoIsChecked = isJsonString(tplDataDemo);
+        if(!tplDataDemoIsChecked){
+          message.warning('模板数据Demo不是合法的JSON!');
+          reject();
+          return false;
+        }
+        resolve(true);
       });
   };
   const submitDatas = () => {

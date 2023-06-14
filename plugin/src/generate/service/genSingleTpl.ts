@@ -1,13 +1,14 @@
 const path = require('path');
 const fs = require('fs');
 import parseFile from './parseFile';
+import { getCurntCatalog } from '../../utils/fsUtils';
 
 export const genSingleTpl = (context: any, panel: any, uri: any, datas: any) => {
     let { saveDatas: { tplName, tplContent, tplDataDemo }} = datas;
     if(typeof tplDataDemo === 'string'){
         tplDataDemo = JSON.parse(tplDataDemo);
     }
-    const tarDir = path.dirname(uri.path.slice(1));
+    const tarDir = getCurntCatalog(uri);
     const fileName = tplName.slice(0, tplName.lastIndexOf('.'));
     const parseRes = parseFile(tplContent, {...tplDataDemo, fileName});
     if(parseRes.success){
