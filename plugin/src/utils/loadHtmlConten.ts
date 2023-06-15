@@ -18,7 +18,7 @@ import * as vscode from 'vscode';
     html = html.replace(/(<link.+?href="|<script.+?src="|<iframe.+?src="|<img.+?src=")(.+?)"/g, (m: any, $1: string, $2: string) => {
         if($2.indexOf("https://") < 0){
             // return $1 + vscode.Uri.file(path.resolve(dirPath, $2)).with({ scheme: 'vscode-resource' }).toString() + '"';
-            let resPath = vscode.Uri.file(path.resolve(dirPath, `.${$2}`));
+            let resPath = vscode.Uri.file(path.resolve(dirPath, `${$2}`));
             let onDiskPath = vscode.Uri.joinPath(resPath);
             return $1 + panel.webview.asWebviewUri(onDiskPath) + '"';
         }else {
