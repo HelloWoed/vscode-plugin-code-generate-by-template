@@ -38,7 +38,9 @@ const readModuleFiles = (strPath: string, childItem: string) => {
     return [moduleRes];
 };
 export const getTplDatasFn = (context: any, panel: any, uri: any) => {
+    debugger;
     const tarFolder =  path.join(context.extensionPath, CACHE_PATH);
+    console.log(tarFolder);
     const folderContent = fs.readdirSync (tarFolder);
     const res = {
         'curnt_work_catalog_path': getCurntCatalog(uri)

@@ -2,7 +2,7 @@
   "name": "generate-code-by-template",
   "displayName": "generate-code-by-template",
   "description": "",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.78.0"
   },
@@ -44,7 +44,9 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/runTest.js",
+    "package-copy-static": "node ./build/build.js && vsce package",
+    "package": "vsce package"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",

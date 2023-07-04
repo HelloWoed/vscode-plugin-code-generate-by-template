@@ -36,6 +36,6 @@ export default defineConfig({
     // })()
   ],
   build: {
-    outDir: '../plugin/src/generate/generate-views/'
+    outDir: '../plugin/out/views/'
   }
 });

@@ -8,7 +8,7 @@ import {LifeCycle} from './generate/service/lifeCycle';
 
 let currentPanel: vscode.WebviewPanel | undefined = undefined as any;
 const createWebViewPanel = (context: any, columnToShowIn: any, uri: any) => {
-	const webviewDir = path.join(context.extensionPath, 'src');
+	const webviewDir = path.join(context.extensionPath, './');
 	currentPanel = vscode.window.createWebviewPanel(
 		'generateFileWebView', // viewType
 		"创建模板文件", // 视图标题
@@ -27,7 +27,7 @@ const createWebViewPanel = (context: any, columnToShowIn: any, uri: any) => {
 	);
 	new MessageBridge(context, currentPanel, uri).openMes();
 	// currentPanel.webview.html = getWebViewContent(context, 'src/generate/pages/index.html', currentPanel);
-	currentPanel.webview.html = getWebViewContent(context, 'src/generate/generate-views/index.html', currentPanel);
+	currentPanel.webview.html = getWebViewContent(context, 'out/views/index.html', currentPanel);
 	vscode.window.setStatusBarMessage('欢迎来到召唤师峡谷！');
 	new LifeCycle(currentPanel).subscribe();
 };

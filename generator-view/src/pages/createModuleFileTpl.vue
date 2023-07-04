@@ -115,12 +115,12 @@
     }
   }, {deep: true})
   watch(() => props.curtRowData, () => {
+    initTplInfo();
     if(props.curtRowData){
       state.curntRowOrignData = JSON.parse(JSON.stringify(props.curtRowData));
       const { info, moduleTreeData, demoData} = JSON.parse(JSON.stringify(props.curtRowData));
       tplInfo.tplName = info.tplName;
       tplInfo.tplDes = info.tplDes;
-      tplInfo.moduleTreeData.length = 0;
       moduleTreeData.forEach(item => {
         tplInfo.moduleTreeData.push(item)
       });
@@ -128,6 +128,12 @@
       state.selectedNodeData = tplInfo.moduleTreeData[0] || null;
     }
   }, { immediate: true, deep: true });
+  const initTplInfo = () => {
+    tplInfo.tplName = '';
+    tplInfo.tplDes = '';
+    tplInfo.tplDataDemo = '';
+    tplInfo.moduleTreeData.length = 0;
+  }
   const open = () => {
     state.visible = true;
   }

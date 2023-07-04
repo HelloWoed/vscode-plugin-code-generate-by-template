@@ -59,6 +59,7 @@
     tplDataDemo: ''
   });
   watch(() => props.curtRowData, () => {
+    initTplInfo();
     if(props.curtRowData){
       state.curntRowOrignData = JSON.parse(JSON.stringify(props.curtRowData));
       const { info, tplContent, demoData} = props.curtRowData;
@@ -68,6 +69,12 @@
       tplInfo.tplDataDemo = demoData;
     }
   }, { immediate: true, deep: true });
+  const initTplInfo = () => {
+    tplInfo.tplName = '';
+    tplInfo.tplDes = '';
+    tplInfo.tplContent = '';
+    tplInfo.tplDataDemo = '';
+  }
   const open = () => {
     state.visible = true;
   }

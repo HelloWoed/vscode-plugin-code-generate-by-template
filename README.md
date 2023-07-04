@@ -21,3 +21,8 @@
 ## 模板管理
 - 目录 /plugin
 - 打包 vsce package
+### 注意
+- 打包时，先打包views，再打包plugin
+  > 1、 cd /generate-view   npm run build
+
+  > 2、 cd /plugin   npm run package-copy-static
