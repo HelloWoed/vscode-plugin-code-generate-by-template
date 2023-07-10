@@ -20,17 +20,16 @@
                   @select="moduleTreeOnSelect"
                 >
                   <template #title="{ key: treeKey, title, type }">
-                    <a-dropdown v-if="type == 'folder'" :trigger="['contextmenu']">
-                      <span>{{ title }}</span>
-                      <template #overlay>
-                        <a-menu @click="({ key: menuKey }) => onContextMenuClick(treeKey, menuKey)">
-                          <a-menu-item key="newFolder">新建文件夹</a-menu-item>
-                          <a-menu-item key="newFile">新建文件</a-menu-item>
-                          <a-menu-item key="del">删除</a-menu-item>
-                        </a-menu>
-                      </template>
-                    </a-dropdown>
-                    <span v-else>{{ title }}</span>
+                    <a-dropdown :trigger="['contextmenu']">
+                        <span>{{ title }}</span>
+                        <template #overlay>
+                          <a-menu @click="({ key: menuKey }) => onContextMenuClick(treeKey, menuKey)">
+                            <a-menu-item v-if="type == 'folder'" key="newFolder">新建文件夹</a-menu-item>
+                            <a-menu-item v-if="type == 'folder'" key="newFile">新建文件</a-menu-item>
+                            <a-menu-item v-if="treeKey != tplInfo.moduleTreeData[0].key" key="del">删除</a-menu-item>
+                          </a-menu>
+                        </template>
+                      </a-dropdown>
                   </template>
                 </a-tree>
               </a-col>
@@ -141,7 +140,7 @@
   }
   const createFoler = (treeTar) => {
     const itemFolder = {
-      title: 'New Folder',
+      title: tplInfo.tplName,
       type: 'folder',
       key: buildTreeKey()
     }
@@ -156,7 +155,7 @@
   };
   const createFile = (treeTar) => {
     const itemFile = {
-      title: 'New File',
+      title: tplInfo.tplName,
       type: 'file',
       key: buildTreeKey()
     }
@@ -169,8 +168,12 @@
     state.moduleSelectedKeys = [itemFile.key];
     state.moduleExpandedKeys.push(treeTar.key);
   };
-  const deleteFiles = (_treeTar) => {
-
+  const deleteFiles = (treeTar) => {
+    const parentData = findByTreeKey(tplInfo.moduleTreeData, treeTar.parentKey);
+    parentData.children = parentData.children.filter(ite => ite.key != treeTar.key);
+    state.selectedNodeData = parentData;
+    state.moduleSelectedKeys = [parentData.key];
+    state.moduleExpandedKeys.push(parentData.key);
   };
   const onContextMenuClick = (treeKey, menuKey) => {
     const treeTar = findByTreeKey(tplInfo.moduleTreeData, treeKey);

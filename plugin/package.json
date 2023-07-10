@@ -2,7 +2,7 @@
   "name": "generate-code-by-template",
   "displayName": "generate-code-by-template",
   "description": "",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "engines": {
     "vscode": "^1.78.0"
   },
