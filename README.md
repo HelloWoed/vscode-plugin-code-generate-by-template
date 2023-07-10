@@ -24,6 +24,7 @@
 ### 注意
 - 打包时，先打包views，再打包plugin
   > 1、 cd /plugin   rm -rf out/
+  
   > 2、 cd /generate-view   npm run build
 
   > 3、 cd /plugin   npm run package-copy-static
